@@ -12,22 +12,25 @@ with open("proxies.txt", "r") as f:
         q.put(p)
 
 
-print(requests.get("http://ipinfo.io/json").status_code)
+print(q.qsize())
+r = requests.get("https://github.com", timeout=10)
+print(r)
 
 def check_proxies():
     global q
     while not q.empty():
         proxy = q.get()
         try:
-            print(f"checking proxy {proxy}")
-            res = requests.get("http://ipinfo.io/json",
+            #print(f"checking proxy {proxy}")
+            #print(q.qsize())
+            res = requests.get("https://ipinfo.io/",
                                proxies={"http": proxy,
                                         "https": proxy})
+            print(f"proxy {proxy}" + f"status {res.status_code}")
         except:
             continue
         if res.status_code == 200:
             print(proxy)
 
 
-for _ in range(2):
-    threading.Thread(target=check_proxies).start()
+check_proxies()

@@ -1,6 +1,5 @@
-import threading
 import queue
-
+import threading
 import requests
 
 q = queue.Queue()
@@ -12,10 +11,6 @@ with open("proxies.txt", "r") as f:
         q.put(p)
 
 
-print(q.qsize())
-r = requests.get("https://github.com", timeout=10)
-print(r)
-
 def check_proxies():
     global q
     while not q.empty():
@@ -23,14 +18,14 @@ def check_proxies():
         try:
             #print(f"checking proxy {proxy}")
             #print(q.qsize())
-            res = requests.get("https://ipinfo.io/",
+            res = requests.get("https://challengereumode.com/l20x340rfymp.html#",
                                proxies={"http": proxy,
                                         "https": proxy})
-            print(f"proxy {proxy}" + f"status {res.status_code}")
         except:
             continue
         if res.status_code == 200:
             print(proxy)
 
 
-check_proxies()
+for _ in range(10):
+    threading.Thread(target=check_proxies).start()
